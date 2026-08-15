@@ -21,6 +21,8 @@ int stb_string_cmp(stb_string* s1, stb_string* s2);
 void stb_string_insert(stb_string* s, int index, char* data);
 void stb_string_pop(stb_string* s);
 void stb_string_pop_at(stb_string* s, int index);
+stb_string stb_string_copy(stb_string* s);
+stb_string stb_string_substr(stb_string* s, int start, int length);
 
 #ifdef STB_STRING_IMPLEMENTATION
 
@@ -162,6 +164,44 @@ void stb_string_pop_at(stb_string* s, int index)
     memmove(s->data + index, s->data + index + 1, s->length - index);
 
     s->length -= 1;
+}
+
+stb_string stb_string_copy(stb_string* s)
+{
+    stb_string str;
+    str.length = (int)strlen(s->data);
+    str.capacity = str.length + 1;
+    str.data = malloc(str.capacity);
+    return str;
+}
+
+stb_string stb_string_substr(stb_string* s, int start, int length)
+{
+    stb_string str;
+    str.data = NULL;
+    str.length = 0;
+    str.capacity = 0;
+
+    if (start < 0 || length < 0 || start + length > s->length)
+    {
+        fprintf(stderr, "stb_string_substr: range out of bounds (start=%d, length=%d)\n", start, length);
+        return str;
+    }
+
+    str.capacity = length + 1; // +1 for null terminator
+    str.data = malloc(str.capacity);
+    if (!str.data)
+    {
+        fprintf(stderr, "stb_string_substr: malloc failed\n");
+        str.capacity = 0;
+        return str;
+    }
+
+    memcpy(str.data, s->data + start, length);
+    str.data[length] = '\0';
+    str.length = length;
+
+    return str;
 }
 
 #endif // STB_STRING_IMPLEMENTATION

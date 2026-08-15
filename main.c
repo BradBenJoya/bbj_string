@@ -62,6 +62,28 @@ int main(void)
     stb_string_pop_at(&popat, -1);              // should print bounds error, no crash
     stb_string_pop_at(&popat, popat.length);     // should print bounds error, no crash
 
+    // --- stb_string_substr ---
+    stb_string src = stb_make_string("Hello World!");
+
+    stb_string mid = stb_string_substr(&src, 6, 5);
+    printf("substr(6,5): %s (expect \"World\")\n", stb_string_c_str(&mid));
+
+    stb_string start_sub = stb_string_substr(&src, 0, 5);
+    printf("substr(0,5): %s (expect \"Hello\")\n", stb_string_c_str(&start_sub));
+
+    stb_string empty_sub = stb_string_substr(&src, 3, 0);
+    printf("substr(3,0): \"%s\" (expect \"\")\n", stb_string_c_str(&empty_sub));
+
+    stb_string full_sub = stb_string_substr(&src, 0, src.length);
+    printf("substr(0,length): %s (expect \"Hello World!\")\n", stb_string_c_str(&full_sub));
+
+    // mutating the substr must not affect src (independent buffer check)
+    stb_string_append(&mid, "!!!");
+    printf("after mutating substr, src is still: %s (expect \"Hello World!\")\n", stb_string_c_str(&src));
+
+    stb_string bad_sub = stb_string_substr(&src, 5, 100);  // out of bounds
+    stb_string neg_sub = stb_string_substr(&src, -1, 3);   // negative start
+
     stb_destroy_string(&str);
     stb_destroy_string(&a);
     stb_destroy_string(&b);
@@ -69,5 +91,12 @@ int main(void)
     stb_destroy_string(&ins);
     stb_destroy_string(&pop);
     stb_destroy_string(&popat);
+    stb_destroy_string(&src);
+    stb_destroy_string(&mid);
+    stb_destroy_string(&start_sub);
+    stb_destroy_string(&empty_sub);
+    stb_destroy_string(&full_sub);
+    stb_destroy_string(&bad_sub);
+    stb_destroy_string(&neg_sub);
     return 0;
 }
