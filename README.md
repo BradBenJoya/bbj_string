@@ -64,12 +64,12 @@ you're including this in more than one `.c` file in the same project.
 
 ## Testing
 
-`test_stb_string.c` is a small assert-based test suite covering every
+`tests/tests.c` is a small assert-based test suite covering every
 function, including bounds/NULL edge cases. Build and run it with:
 
 ```sh
-cc -std=c99 -Wall -Wextra -o test_stb_string test_stb_string.c
-./test_stb_string
+cc -std=c99 -Wall -Wextra -o test_stb_string tests.c
+./tests
 ```
 
 ## License
