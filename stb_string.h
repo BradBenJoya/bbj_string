@@ -17,6 +17,7 @@ void stb_string_append(stb_string* s, char* data);
 void stb_string_clear(stb_string* s);
 void stb_string_reserve(stb_string* s, unsigned int capacity);
 const char* stb_string_c_str(stb_string* s);
+int stb_string_cmp(stb_string* s1, stb_string* s2);
 
 #ifdef STB_STRING_IMPLEMENTATION
 
@@ -79,6 +80,7 @@ void stb_string_append(stb_string* s, char* data)
 void stb_string_clear(stb_string* s)
 {
     s->length = 0;
+    s->data[0] = '\0';
 }
 
 void stb_string_reserve(stb_string* s, unsigned int capacity)
@@ -102,6 +104,11 @@ void stb_string_reserve(stb_string* s, unsigned int capacity)
 const char* stb_string_c_str(stb_string* s)
 {
     return s->data;
+}
+
+int stb_string_cmp(stb_string* s1, stb_string* s2)
+{
+    return strcmp(s1->data, s2->data);
 }
 
 #endif // STB_STRING_IMPLEMENTATION
