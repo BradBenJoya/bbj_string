@@ -18,6 +18,7 @@ void stb_string_clear(stb_string* s);
 void stb_string_reserve(stb_string* s, unsigned int capacity);
 const char* stb_string_c_str(stb_string* s);
 int stb_string_cmp(stb_string* s1, stb_string* s2);
+void stb_string_insert(stb_string* s, int index, char* data);
 
 #ifdef STB_STRING_IMPLEMENTATION
 
@@ -109,6 +110,35 @@ const char* stb_string_c_str(stb_string* s)
 int stb_string_cmp(stb_string* s1, stb_string* s2)
 {
     return strcmp(s1->data, s2->data);
+}
+
+void stb_string_insert(stb_string* s, int index, char* data)
+{
+    if (index < 0 || index > s->length)
+    {
+        fprintf(stderr, "stb_string_insert: index out of bounds at %d\n", index);
+        return;
+    }
+
+    int insert_len = (int)strlen(data);
+
+    if (s->length + insert_len + 1 > s->capacity)
+    {
+        int new_capacity = (s->length + insert_len + 1) * 2;
+        char* new_data = realloc(s->data, new_capacity);
+        if (!new_data)
+        {
+            fprintf(stderr, "stb_string_insert: realloc failed\n");
+            return;
+        }
+        s->data = new_data;
+        s->capacity = new_capacity;
+    }
+
+    memmove(s->data + index + insert_len, s->data + index, s->length - index + 1);
+    memcpy(s->data + index, data, insert_len);
+
+    s->length += insert_len;
 }
 
 #endif // STB_STRING_IMPLEMENTATION
