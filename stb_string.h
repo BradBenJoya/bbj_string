@@ -14,6 +14,9 @@ void stb_destroy_string(stb_string* s);
 void stb_print_string(stb_string* s);
 char* stb_string_at(stb_string* s, int index);
 void stb_string_append(stb_string* s, char* data);
+void stb_string_clear(stb_string* s);
+void stb_string_reserve(stb_string* s, unsigned int capacity);
+const char* stb_string_c_str(stb_string* s);
 
 #ifdef STB_STRING_IMPLEMENTATION
 
@@ -71,6 +74,34 @@ void stb_string_append(stb_string* s, char* data)
 
     memcpy(s->data + s->length, data, strlen(data) + 1); // includes null terminator
     s->length += strlen(data);
+}
+
+void stb_string_clear(stb_string* s)
+{
+    s->length = 0;
+}
+
+void stb_string_reserve(stb_string* s, unsigned int capacity)
+{
+    if (capacity <= (unsigned int)s->capacity)
+    {
+        return;
+    }
+
+    char* new_data = realloc(s->data, capacity);
+    if (!new_data)
+    {
+        fprintf(stderr, "stb_string_reserve: realloc failed\n");
+        return;
+    }
+
+    s->data = new_data;
+    s->capacity = (int)capacity;
+}
+
+const char* stb_string_c_str(stb_string* s)
+{
+    return s->data;
 }
 
 #endif // STB_STRING_IMPLEMENTATION
