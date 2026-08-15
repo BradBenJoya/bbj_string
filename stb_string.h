@@ -24,6 +24,8 @@ void stb_string_pop_at(stb_string* s, int index);
 stb_string stb_string_copy(stb_string* s);
 stb_string stb_string_substr(stb_string* s, int start, int length);
 int stb_string_find(stb_string* s, char* data);
+int stb_string_length(stb_string* s);
+int stb_string_capacity(stb_string* s);
 #define STB_STRING_NPOS (-1)
 
 #ifdef STB_STRING_IMPLEMENTATION
