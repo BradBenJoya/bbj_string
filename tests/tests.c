@@ -1,3 +1,61 @@
+/* stb_string.h - v1.1 - public domain string library
+   A dynamic, owning, null-terminated string type for C.
+
+   Do this:
+      #define STB_STRING_IMPLEMENTATION
+   before you include this file in *one* C or C++ file to create
+   the implementation.
+
+   // i.e. it should look like this:
+   #include ...
+   #include ...
+   #define STB_STRING_IMPLEMENTATION
+   #include "stb_string.h"
+
+   Optionally define STB_STRING_STATIC before the include to make
+   all functions and the implementation private to that file.
+
+   NOTES
+
+   - length/capacity are stored as `int`. Strings longer than
+     INT_MAX are not supported; this is a deliberate choice to
+     keep the struct small and match the signed-index style used
+     throughout the API (STB_STRING_NPOS is -1, not a huge
+     unsigned value). If you need to hold multi-gigabyte strings,
+     this library isn't the right tool as-is.
+
+   - not thread-safe. A single stb_string must not be accessed
+     from more than one thread at a time without external
+     synchronization; two threads may safely use two different
+     stb_strings concurrently.
+
+   - functions that take a stb_string* or a char* parameter check
+     for NULL and fail safely (returning NULL / STB_STRING_NPOS /
+     an empty string / doing nothing, and printing to stderr)
+     rather than crashing. This costs a branch per call; if you
+     never pass NULL and want to skip the checks, that's a
+     reasonable thing to strip out yourself.
+
+   VERSION HISTORY
+
+     1.1  (2026-08)
+          - added NULL-input guards to every function
+          - added stb_string_length / stb_string_capacity accessors
+          - added stb_string_copy, stb_string_substr, stb_string_find
+          - added stb_string_insert, stb_string_pop, stb_string_pop_at
+          - reorganized into stb-style header/implementation layout
+            (STBSDEF, extern "C", public-domain license block)
+     1.0  (2026-08)
+          - initial version: make/destroy/print, at, append, clear,
+            reserve, c_str, cmp
+
+   LICENSE
+     This software is dual-licensed to the public domain and under
+     the following license: you are granted a perpetual, irrevocable
+     license to copy, modify, publish, and distribute this file as
+     you see fit.
+*/
+
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
