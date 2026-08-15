@@ -84,6 +84,25 @@ int main(void)
     stb_string bad_sub = stb_string_substr(&src, 5, 100);  // out of bounds
     stb_string neg_sub = stb_string_substr(&src, -1, 3);   // negative start
 
+    // --- stb_string_find ---
+    int found_mid = stb_string_find(&src, "World");
+    printf("find(\"World\"): %d (expect 6)\n", found_mid);
+
+    int found_start = stb_string_find(&src, "Hello");
+    printf("find(\"Hello\"): %d (expect 0)\n", found_start);
+
+    int found_none = stb_string_find(&src, "xyz");
+    printf("find(\"xyz\"): %d (expect %d, STB_STRING_NPOS)\n", found_none, STB_STRING_NPOS);
+
+    int found_empty = stb_string_find(&src, "");
+    printf("find(\"\"): %d (expect 0)\n", found_empty);
+
+    int found_toolong = stb_string_find(&src, "this needle is way too long to fit");
+    printf("find(too long): %d (expect %d, STB_STRING_NPOS)\n", found_toolong, STB_STRING_NPOS);
+
+    int found_end = stb_string_find(&src, "!");
+    printf("find(\"!\"): %d (expect %d)\n", found_end, src.length - 1);
+
     stb_destroy_string(&str);
     stb_destroy_string(&a);
     stb_destroy_string(&b);

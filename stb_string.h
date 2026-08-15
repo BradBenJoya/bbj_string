@@ -23,6 +23,8 @@ void stb_string_pop(stb_string* s);
 void stb_string_pop_at(stb_string* s, int index);
 stb_string stb_string_copy(stb_string* s);
 stb_string stb_string_substr(stb_string* s, int start, int length);
+int stb_string_find(stb_string* s, char* data);
+#define STB_STRING_NPOS (-1)
 
 #ifdef STB_STRING_IMPLEMENTATION
 
@@ -202,6 +204,24 @@ stb_string stb_string_substr(stb_string* s, int start, int length)
     str.length = length;
 
     return str;
+}
+
+int stb_string_find(stb_string* s, char* find)
+{
+    int find_len = (int)strlen(find);
+
+    if (find_len == 0) return 0;
+    if (find_len > s->length) return STB_STRING_NPOS;
+
+    for (int i = 0; i <= s->length - find_len; i++)
+    {
+        if (strncmp(s->data + i, find, find_len) == 0)
+        {
+            return i;
+        }
+    }
+
+    return STB_STRING_NPOS;
 }
 
 #endif // STB_STRING_IMPLEMENTATION
