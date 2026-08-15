@@ -43,10 +43,31 @@ int main(void)
     stb_string_insert(&ins, -1, "bad");   // should print bounds error, no crash
     stb_string_insert(&ins, ins.length + 1, "bad"); // should print bounds error, no crash
 
+    // --- stb_string_pop ---
+    stb_string pop = stb_make_string("abcde");
+    stb_string_pop(&pop);
+    printf("pop: %s (expect \"abcd\")\n", stb_string_c_str(&pop));
+
+    // --- stb_string_pop_at ---
+    stb_string popat = stb_make_string("abcde");
+    stb_string_pop_at(&popat, 1); // remove 'b'
+    printf("pop_at(1): %s (expect \"acde\")\n", stb_string_c_str(&popat));
+
+    stb_string_pop_at(&popat, 0); // remove 'a'
+    printf("pop_at(0): %s (expect \"cde\")\n", stb_string_c_str(&popat));
+
+    stb_string_pop_at(&popat, popat.length - 1); // remove last char 'e'
+    printf("pop_at(last): %s (expect \"cd\")\n", stb_string_c_str(&popat));
+
+    stb_string_pop_at(&popat, -1);              // should print bounds error, no crash
+    stb_string_pop_at(&popat, popat.length);     // should print bounds error, no crash
+
     stb_destroy_string(&str);
     stb_destroy_string(&a);
     stb_destroy_string(&b);
     stb_destroy_string(&c);
     stb_destroy_string(&ins);
+    stb_destroy_string(&pop);
+    stb_destroy_string(&popat);
     return 0;
 }

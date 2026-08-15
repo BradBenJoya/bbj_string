@@ -19,6 +19,8 @@ void stb_string_reserve(stb_string* s, unsigned int capacity);
 const char* stb_string_c_str(stb_string* s);
 int stb_string_cmp(stb_string* s1, stb_string* s2);
 void stb_string_insert(stb_string* s, int index, char* data);
+void stb_string_pop(stb_string* s);
+void stb_string_pop_at(stb_string* s, int index);
 
 #ifdef STB_STRING_IMPLEMENTATION
 
@@ -139,6 +141,27 @@ void stb_string_insert(stb_string* s, int index, char* data)
     memcpy(s->data + index, data, insert_len);
 
     s->length += insert_len;
+}
+
+void stb_string_pop(stb_string* s)
+{
+    if (s->length == 0) return;
+    s->length -= 1;
+    s->data[s->length] = '\0';
+}
+
+void stb_string_pop_at(stb_string* s, int index)
+{
+    if (s->length == 0) return;
+    if (index < 0 || index >= s->length)
+    {
+        fprintf(stderr, "stb_string_pop_at: index out of bounds at %d\n", index);
+        return;
+    }
+
+    memmove(s->data + index, s->data + index + 1, s->length - index);
+
+    s->length -= 1;
 }
 
 #endif // STB_STRING_IMPLEMENTATION
