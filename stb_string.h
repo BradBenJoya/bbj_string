@@ -12,6 +12,7 @@ typedef struct
 stb_string stb_make_string(char* data);
 void stb_destroy_string(stb_string* s);
 void stb_print_string(stb_string* s);
+char* stb_string_at(stb_string* s, int index);
 
 #ifdef STB_STRING_IMPLEMENTATION
 
@@ -41,6 +42,16 @@ void stb_destroy_string(stb_string* s)
 void stb_print_string(stb_string* s)
 {
     printf("%s\n", s->data);
+}
+
+char* stb_string_at(stb_string* s, int index)
+{
+    if (index >= s->length || index < 0)
+    {
+        fprintf(stderr, "stb_string_at: index out of bounds at %d\n", index);
+        return NULL;
+    }
+    return &s->data[index];
 }
 
 #endif // STB_STRING_IMPLEMENTATION
