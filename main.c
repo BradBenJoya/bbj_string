@@ -103,6 +103,26 @@ int main(void)
     int found_end = stb_string_find(&src, "!");
     printf("find(\"!\"): %d (expect %d)\n", found_end, src.length - 1);
 
+    // --- stb_string_copy ---
+    stb_string cloned = stb_string_copy(&src);
+    printf("copy: %s (expect \"Hello World!\")\n", stb_string_c_str(&cloned));
+
+    // mutating the copy must not affect src (independent buffer check)
+    stb_string_append(&cloned, "???");
+    printf("after mutating copy, src is still: %s (expect \"Hello World!\")\n", stb_string_c_str(&src));
+    printf("copy after mutation: %s (expect \"Hello World!???\")\n", stb_string_c_str(&cloned));
+
+    // --- stb_string_length / stb_string_capacity ---
+    stb_string cap_test = stb_make_string("abc"); // length 3, capacity 4
+    printf("length: %d (expect 3)\n", stb_string_length(&cap_test));
+    printf("capacity: %d (expect 4)\n", stb_string_capacity(&cap_test));
+
+    stb_string_reserve(&cap_test, 50);
+    printf("capacity after reserve(50): %d (expect >= 50)\n", stb_string_capacity(&cap_test));
+
+    stb_string_append(&cap_test, "def");
+    printf("length after append: %d (expect 6)\n", stb_string_length(&cap_test));
+
     stb_destroy_string(&str);
     stb_destroy_string(&a);
     stb_destroy_string(&b);
@@ -117,5 +137,7 @@ int main(void)
     stb_destroy_string(&full_sub);
     stb_destroy_string(&bad_sub);
     stb_destroy_string(&neg_sub);
+    stb_destroy_string(&cloned);
+    stb_destroy_string(&cap_test);
     return 0;
 }

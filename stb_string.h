@@ -173,9 +173,17 @@ void stb_string_pop_at(stb_string* s, int index)
 stb_string stb_string_copy(stb_string* s)
 {
     stb_string str;
-    str.length = (int)strlen(s->data);
-    str.capacity = str.length + 1;
+    str.length = s->length;
+    str.capacity = s->length + 1;
     str.data = malloc(str.capacity);
+    if (!str.data)
+    {
+        fprintf(stderr, "stb_string_copy: malloc failed\n");
+        str.length = 0;
+        str.capacity = 0;
+        return str;
+    }
+    memcpy(str.data, s->data, str.capacity); // includes null terminator
     return str;
 }
 
@@ -224,6 +232,16 @@ int stb_string_find(stb_string* s, char* find)
     }
 
     return STB_STRING_NPOS;
+}
+
+int stb_string_length(stb_string* s)
+{
+    return s->length;
+}
+
+int stb_string_capacity(stb_string* s)
+{
+    return s->capacity;
 }
 
 #endif // STB_STRING_IMPLEMENTATION
