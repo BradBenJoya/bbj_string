@@ -13,6 +13,7 @@ stb_string stb_make_string(char* data);
 void stb_destroy_string(stb_string* s);
 void stb_print_string(stb_string* s);
 char* stb_string_at(stb_string* s, int index);
+void stb_string_append(stb_string* s, char* data);
 
 #ifdef STB_STRING_IMPLEMENTATION
 
@@ -52,6 +53,24 @@ char* stb_string_at(stb_string* s, int index)
         return NULL;
     }
     return &s->data[index];
+}
+
+void stb_string_append(stb_string* s, char* data)
+{
+    if (s->length + strlen(data) + 1 > s->capacity)
+    {
+        char* new_data = realloc(s->data, (s->length + strlen(data) + 1) * 2);
+        if (!new_data)
+        {
+            fprintf(stderr, "stb_string_append: realloc failed\n");
+            return;
+        }
+        s->data = new_data;
+        s->capacity = (s->length + strlen(data) + 1) * 2;
+    }
+
+    memcpy(s->data + s->length, data, strlen(data) + 1); // includes null terminator
+    s->length += strlen(data);
 }
 
 #endif // STB_STRING_IMPLEMENTATION
